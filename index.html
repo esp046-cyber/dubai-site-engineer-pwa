@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AGAC Dubai">
+  <meta name="description" content="AGAC Site Engineer Field Manual (Dubai, UAE Edition): 120 field tips on gear, Dubai regulations, concrete, substructure, QA/QC and site management.">
+  <meta name="msapplication-config" content="browserconfig.xml">
+
+  <meta property="og:title" content="AGAC Site Engineer Field Manual (Dubai, UAE Edition)">
+  <meta property="og:description" content="120 field tips for Dubai site engineers: DM, Trakhees, DEWA, hot-weather concrete, QA/QC and site management.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="assets/og-image.png">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <title>AGAC Site Engineer Field Manual - Dubai</title>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand">
+        <span class="brand-badge">DUBAI &bull; UAE</span>
+        <h1>AGAC SITE ENGINEER MANUAL</h1>
+      </div>
+      <div class="header-actions">
+        <button class="btn-install" id="installBtn" hidden>Install</button>
+        <button class="btn-bookmark-toggle" id="filterBookmarksBtn" aria-label="Show saved tips" aria-pressed="false">&#9733; <span id="bookmarkCount">0</span></button>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="search" id="searchInput" placeholder="Search tips (concrete, Trakhees, DM, cover...)" autocomplete="off" aria-label="Search tips">
+    </div>
+
+    <nav class="category-pills" id="categoryPills" aria-label="Categories"></nav>
+  </header>
+
+  <main class="content-container">
+    <div class="stats-banner">
+      <div class="stat-item"><span class="stat-val">120</span><span class="stat-lbl">Field tips</span></div>
+      <div class="stat-item"><span class="stat-val" id="shownCount">120</span><span class="stat-lbl">Showing</span></div>
+      <div class="stat-item"><span class="stat-val">Offline</span><span class="stat-lbl">Ready</span></div>
+    </div>
+
+    <div class="notice">Reference only. Always confirm limits and procedures against the current project specification, consultant instructions and authority circulars (DM, Trakhees, DEWA, DCD, RTA, MOHRE).</div>
+
+    <div class="tips-grid" id="tipsGrid"></div>
+    <div class="empty-state" id="emptyState" hidden><p>No field tips match your current criteria.</p></div>
+  </main>
+
+  <footer class="app-footer">
+    <p>AGAC &bull; Dubai, United Arab Emirates</p>
+    <p class="sub">Field reference &bull; Works offline &bull; <a href="docs/SITE_CHECKLIST.md">Checklists</a></p>
+  </footer>
+
+  <script src="config/site.config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

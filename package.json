@@ -1,0 +1,17 @@
+{
+  "name": "agac-site-engineer-dubai",
+  "version": "1.1.0",
+  "description": "AGAC Site Engineer Field Manual (Dubai, UAE Edition) PWA",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "http-server . -p 3000 -c-1",
+    "server": "node backend/server.js",
+    "test": "node tests/app.test.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4",
+    "http-server": "^14.1.1"
+  },
+  "license": "MIT"
+}
