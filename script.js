@@ -732,6 +732,9 @@ const CATEGORIES = [
   { key: 'MANAGEMENT', label: 'Management' }
 ];
 
+const STAR_ON = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';
+const STAR_OFF = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';
+
 const HASH_TO_CAT = { concrete: 'CONCRETE', regulations: 'REGULATIONS', edc: 'EDC', foundations: 'FOUNDATIONS', qaqc: 'QAQC', management: 'MANAGEMENT', all: 'ALL' };
 
 let activeCategory = 'ALL';
@@ -779,7 +782,7 @@ function renderTips() {
     const on = bookmarkedIds.includes(t.id);
     return '<article class="tip-card">' +
       '<div class="tip-header"><div><span class="tip-badge">' + esc(t.cat) + '</span><span class="tip-num">#' + t.id + '</span></div>' +
-      '<button class="btn-star' + (on ? ' starred' : '') + '" data-id="' + t.id + '" aria-label="' + (on ? 'Remove bookmark' : 'Bookmark tip') + '">' + (on ? '\u2605' : '\u2606') + '</button></div>' +
+      '<button class="btn-star' + (on ? ' starred' : '') + '" data-id="' + t.id + '" aria-label="' + (on ? 'Remove bookmark' : 'Bookmark tip') + '">' + (on ? STAR_ON : STAR_OFF) + '</button></div>' +
       '<h2 class="tip-title">' + esc(t.title) + '</h2>' +
       '<p class="tip-desc">' + esc(t.desc) + '</p></article>';
   }).join('');
@@ -804,9 +807,14 @@ document.getElementById('tipsGrid').addEventListener('click', e => {
   const b = e.target.closest('.btn-star');
   if (b) toggleBookmark(Number(b.dataset.id));
 });
+let searchTimer = null;
 document.getElementById('searchInput').addEventListener('input', e => {
-  searchQuery = e.target.value.toLowerCase().trim();
-  renderTips();
+  const v = e.target.value;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQuery = v.toLowerCase().trim();
+    renderTips();
+  }, 150);
 });
 document.getElementById('filterBookmarksBtn').addEventListener('click', e => {
   showOnlyBookmarks = !showOnlyBookmarks;
@@ -814,6 +822,33 @@ document.getElementById('filterBookmarksBtn').addEventListener('click', e => {
   renderTips();
 });
 window.addEventListener('hashchange', applyHash);
+
+// Theme: dark (default) or high-contrast light for sunlight
+function applyTheme(t) {
+  if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', t === 'light' ? '#FFFFFF' : '#D4AF37');
+}
+let theme = 'dark';
+try { theme = localStorage.getItem('agac_theme') || 'dark'; } catch (e) {}
+applyTheme(theme);
+document.getElementById('themeBtn').addEventListener('click', () => {
+  theme = theme === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('agac_theme', theme); } catch (e) {}
+  applyTheme(theme);
+});
+
+// iOS install hint (iOS has no beforeinstallprompt)
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+let hintDismissed = false;
+try { hintDismissed = localStorage.getItem('agac_ios_hint') === '1'; } catch (e) {}
+if (isIOS && !isStandalone && !hintDismissed) document.getElementById('iosHint').hidden = false;
+document.getElementById('iosHintClose').addEventListener('click', () => {
+  document.getElementById('iosHint').hidden = true;
+  try { localStorage.setItem('agac_ios_hint', '1'); } catch (e) {}
+});
 
 // PWA install prompt (Chrome/Android; iOS uses Share > Add to Home Screen)
 let deferredPrompt = null;
